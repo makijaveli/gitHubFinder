@@ -1,18 +1,18 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useContext, useEffect} from 'react';
 import Spinner from "../layout/spinner.component";
 import {Link} from "react-router-dom";
 import Repos from "../repos/repos.component";
+import GithubContext from "../../context/github/githubContext";
 
-const User = ({getUser, match, user, loading, getUserRepos, repos}) => {
+const User = () => {
 
-    let username = match.params.username;
+    const githubContext = useContext(GithubContext);
+    const  {getUser, loading, user, getUserRepos, repos} = githubContext;
+
     useEffect(() => {
-        const getUserEffect = () => {
-            getUser(username)
-        }; getUserEffect()
-        const getUserReposEffect = () => {
-            getUserRepos(match.params.username)
-        }; getUserReposEffect();
+        getUser(user.login)
+        getUserRepos(user.login);
+        // eslint-disable-next-line
     }, [])
 
     const {
@@ -67,7 +67,7 @@ const User = ({getUser, match, user, loading, getUserRepos, repos}) => {
                 <div className="badge danger">Public Repos: {public_repos}</div>
                 <div className="badge badge-dark">Public Gists: {public_gists}</div>
             </div>
-            <Repos repos={repos} />
+            <Repos repos={repos}/>
         </Fragment>
     );
 };
